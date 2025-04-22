@@ -24,7 +24,9 @@ defmodule Issues.CLI do
   Calls the parse_args function which parses the command-line arguments and triggers appropriate behavior.
   """
   def run(argv) do
-    parse_args(argv)
+    argv
+    |> parse_args()
+    |> process()
   end
 
   @doc """
@@ -40,8 +42,7 @@ defmodule Issues.CLI do
     - A list `[user, project, count]` when valid arguments are provided.
   """
   def parse_args(argv) do
-    parse = OptionParser.parse(argv, switches: [help: :boolean], aliases: [h: :help])
-
+    parse = OptionParser.parse(argv, switches: [help: :boolean], aliases: [h: :help]) # returns a tuple of three lists {[args], [options], {ignored}}
     case parse do
       {[help: true], _, _} -> :help
       {_, [user, project, count], _} -> [user, project, String.to_integer(count)]
@@ -49,4 +50,12 @@ defmodule Issues.CLI do
       _ -> :help
     end
   end
+  def process(:help) do
+    IO.inspect "usage: issues <user> <project> [ count | 4 ]"
+    System.halt(0)
+  end
+  def process([_user, _project, _count]) do
+    
+  end
+
 end
