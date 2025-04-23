@@ -56,10 +56,21 @@ defmodule Issues.CLI do
   end
   def process([user, project, count]) do
     Issues.GithubIssues.fetch(user, project)
-    |> sort_into_descending_order()
+    |> sort_into_descending_order(count)
   end
-  def sort_into_descending_order(list_of_issues) do
-    list_of_issues |> Enum.sort(fn i1, i2 -> i1["created_at"] >= i2["created_at"] end)
+  def sort_into_descending_order(list_of_issues, count) do
+    resolved_issues = list_of_issues
+    |> Enum.sort(fn i1, i2 -> i1["created_at"] >= i2["created_at"] end)
+    |> Enum.take(count)
+    |> Enum.map(fn mem -> [mem["number"], mem["created_at"], mem["title"]] end)
+    IO.inspect(String.pad_trailing("number", 10) <> "|  " <> String.pad_trailing("created_at", 40) <> "|  " <> String.pad_trailing("title", 50))
+    IO.inspect("----------+------------------------------------------+-----------------------------------------------------")
+    Enum.each(resolved_issues
+    |> Enum.map(fn [id, timestamp, title] ->
+    String.pad_trailing(Integer.to_string(id), 10)
+    <> "|  " <>String.pad_trailing(timestamp, 40)
+    <> "|  " <> String.pad_trailing(title, 50)
+    end), &IO.inspect/1)
   end
 
 end

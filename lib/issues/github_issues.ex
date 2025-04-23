@@ -23,6 +23,6 @@ defmodule Issues.GithubIssues do
   end
 
   def handle_response({:ok, %Tesla.Env{status: 200, body: body}}) do
-    IO.inspect(body)
+    Jason.decode!(body)
   end
 end
