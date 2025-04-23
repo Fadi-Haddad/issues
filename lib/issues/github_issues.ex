@@ -1,11 +1,14 @@
 defmodule Issues.GithubIssues do
+  use Tesla
+
+  plug Tesla.Middleware.JSON
+
   def create_link(user, project) do
     "https://api.github.com/repos/#{user}/#{project}/issues"
   end
 
   def fetch(user, project) do
-    Tesla.client([{Tesla.Middleware.Headers, [{"User-Agent", "ElixirClient"}]}])
-    |> Tesla.get(create_link(user, project))
+    Tesla.get(create_link(user, project), headers: [{"User-Agent", "ElixirClient"}])
     |> handle_response()
   end
 
