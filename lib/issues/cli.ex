@@ -68,7 +68,7 @@ defmodule Issues.CLI do
     Enum.each(resolved_issues
     |> Enum.map(fn [id, timestamp, title] ->
     String.pad_trailing(Integer.to_string(id), 10)
-    <> "| " <>String.pad_trailing(timestamp, 25)
+    <> "| " <> String.pad_trailing(timestamp, 25)
     <> "| " <> String.pad_trailing(title, 50)
     end), &IO.puts/1)
   end
