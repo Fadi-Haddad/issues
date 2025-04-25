@@ -23,7 +23,7 @@ defmodule Issues.CLI do
 
   Calls the parse_args function which parses the command-line arguments and triggers appropriate behavior.
   """
-  def run(argv) do
+  def main(argv) do
     argv
     |> parse_args()
     |> process()
