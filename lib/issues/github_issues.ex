@@ -1,5 +1,6 @@
 defmodule Issues.GithubIssues do
   use Tesla
+  require Logger
 
   @github_url Application.compile_env(:issues, :github_url)
 
@@ -10,6 +11,7 @@ defmodule Issues.GithubIssues do
   end
 
   def fetch(user, project) do
+    Logger.info("Fetching #{user}'s project #{project}")
     Tesla.get(create_link(user, project), headers: [{"User-Agent", "ElixirClient"}])
     |> handle_response()
   end
