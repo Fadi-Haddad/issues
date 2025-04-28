@@ -5,7 +5,7 @@ defmodule Issues.GithubIssues do
   @github_url Application.compile_env(:issues, :github_url)
 
   plug Tesla.Middleware.JSON
-
+  
   def create_link(user, project) do
     "#{@github_url}/repos/#{user}/#{project}/issues"
   end
