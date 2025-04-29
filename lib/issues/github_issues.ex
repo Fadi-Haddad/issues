@@ -17,11 +17,11 @@ defmodule Issues.GithubIssues do
   end
 
   def handle_response({:error, reason}) do
-    IO.inspect("Error was encountered, reason is: #{inspect(reason)}")
+    Logger.warning("Error was encountered, reason is: #{inspect(reason)}")
   end
 
   def handle_response({:ok, %Tesla.Env{status: 404}}) do
-    IO.inspect("URL not found :(")
+    Logger.warning("URL not found :(")
   end
 
   def handle_response({:ok, %Tesla.Env{status: 200, body: body}}) do

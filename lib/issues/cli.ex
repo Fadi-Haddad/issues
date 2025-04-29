@@ -35,7 +35,7 @@ defmodule Issues.CLI do
   Recognized formats:
     - `--help` or `-h`: Displays help.
     - `<user> <project> <count>`: Gets the last `count` issues from a GitHub repo.
-    - `<user> <project>`: Defaults to getting the last #{@default_count} issues.
+    - `<user> <project>`: Defaults to getting the last @default_count issues.
 
   Returns:
     - `:help` atom for help flags or invalid formats.
