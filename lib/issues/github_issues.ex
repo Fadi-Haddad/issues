@@ -4,7 +4,7 @@ defmodule Issues.GithubIssues do
 
   @github_url Application.compile_env(:issues, :github_url)
 
-  plug Tesla.Middleware.JSON
+  plug(Tesla.Middleware.JSON)
 
   def create_link(user, project) do
     "#{@github_url}/repos/#{user}/#{project}/issues"
@@ -12,6 +12,7 @@ defmodule Issues.GithubIssues do
 
   def fetch(user, project) do
     Logger.info("Fetching #{user}'s project #{project}")
+
     Tesla.get(create_link(user, project), headers: [{"User-Agent", "ElixirClient"}])
     |> handle_response()
   end

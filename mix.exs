@@ -9,6 +9,13 @@ defmodule Issues.MixProject do
       elixir: "~> 1.17",
       start_permanent: Mix.env() == :prod,
       source_url: "https://github.com/Fadi-Haddad/issues",
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.html": :test,
+        "coveralls.json": :test,
+        "coveralls.xml": :test
+      ],
       deps: deps()
     ]
   end
@@ -28,12 +35,15 @@ defmodule Issues.MixProject do
       {:poison, "~> 6.0"},
       {:credo, "~> 1.7"},
       {:ex_doc, "~> 0.37.3"},
-      {:earmark, "~> 1.4"}
+      {:earmark, "~> 1.4"},
+      {:excoveralls, "~> 0.18.5"}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
   end
+
   defp escript_config do
-    [main_module: Issues.CLI]  # Module containing `main/1`
+    # Module containing `main/1`
+    [main_module: Issues.CLI]
   end
 end

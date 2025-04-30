@@ -42,7 +42,9 @@ defmodule Issues.CLI do
     - A list `[user, project, count]` when valid arguments are provided.
   """
   def parse_args(argv) do
-    parse = OptionParser.parse(argv, switches: [help: :boolean], aliases: [h: :help]) # returns a tuple of three lists {[args], [options], {ignored}}
+    # returns a tuple of three lists {[args], [options], {ignored}}
+    parse = OptionParser.parse(argv, switches: [help: :boolean], aliases: [h: :help])
+
     case parse do
       {[help: true], _, _} -> :help
       {_, [user, project, count], _} -> [user, project, String.to_integer(count)]
@@ -50,27 +52,42 @@ defmodule Issues.CLI do
       _ -> :help
     end
   end
+
   def process(:help) do
-    IO.inspect "usage: issues <user> <project> [ count | 4 ]"
+    IO.inspect("usage: issues <user> <project> [ count | 4 ]")
     System.halt(0)
   end
+
   def process([user, project, count]) do
     Issues.GithubIssues.fetch(user, project)
     |> sort_into_descending_order(count)
   end
-  def sort_into_descending_order(list_of_issues, count) do
-    resolved_issues = list_of_issues
-    |> Enum.sort(fn i1, i2 -> i1["created_at"] >= i2["created_at"] end)
-    |> Enum.take(count)
-    |> Enum.map(fn mem -> [mem["number"], mem["created_at"], mem["title"]] end)
-    IO.puts(String.pad_trailing("number", 10) <> "| " <> String.pad_trailing("created_at", 25) <> "| " <> String.pad_trailing("title", 50))
-    IO.puts("----------+--------------------------+-----------------------------------------------------")
-    Enum.each(resolved_issues
-    |> Enum.map(fn [id, timestamp, title] ->
-    String.pad_trailing(Integer.to_string(id), 10)
-    <> "| " <> String.pad_trailing(timestamp, 25)
-    <> "| " <> String.pad_trailing(title, 50)
-    end), &IO.puts/1)
-  end
 
+  def sort_into_descending_order(list_of_issues, count) do
+    resolved_issues =
+      list_of_issues
+      |> Enum.sort(fn i1, i2 -> i1["created_at"] >= i2["created_at"] end)
+      |> Enum.take(count)
+      |> Enum.map(fn mem -> [mem["number"], mem["created_at"], mem["title"]] end)
+
+    IO.puts(
+      String.pad_trailing("number", 10) <>
+        "| " <> String.pad_trailing("created_at", 25) <> "| " <> String.pad_trailing("title", 50)
+    )
+
+    IO.puts(
+      "----------+--------------------------+-----------------------------------------------------"
+    )
+
+    Enum.each(
+      resolved_issues
+      |> Enum.map(fn [id, timestamp, title] ->
+        String.pad_trailing(Integer.to_string(id), 10) <>
+          "| " <>
+          String.pad_trailing(timestamp, 25) <>
+          "| " <> String.pad_trailing(title, 50)
+      end),
+      &IO.puts/1
+    )
+  end
 end
